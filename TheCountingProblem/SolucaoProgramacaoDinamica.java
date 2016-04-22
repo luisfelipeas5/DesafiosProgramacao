@@ -2,7 +2,9 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
 
-public class TheCountingProblem{
+public class SolucaoProgramacaoDinamica{
+	static Map<Integer, Intervalo> intervalosCalculados = new HashMap<>();
+
 	public static void main(String[] args){
 		Scanner scanner = new Scanner(System.in);
 		
@@ -19,9 +21,7 @@ public class TheCountingProblem{
 				limiteB = Integer.parseInt(split[0]);
 			}
 			
-			//String saida = solucaoSimplista(limiteA, limiteB);
-			//String saida = solucaoProgramacaoDinamica(limiteA, limiteB);
-			String saida = solucaoAlternativa(limiteA, limiteB);
+			String saida = solucaoProgramacaoDinamica(limiteA, limiteB);
 			System.out.println(saida);
 			
 			entrada = scanner.nextLine();
@@ -30,49 +30,6 @@ public class TheCountingProblem{
 		scanner.close();
 	}
 	
-	static String solucaoAlternativa(int limiteA, int limiteB){
-		long[] ocorrencias = new long[10];
-		
-		for(int i = limiteA;  i <= limiteB; i++ ){			
-			int iCopia = i;
-			while(iCopia > 0){
-				int sobra = iCopia%10;
-			
-				ocorrencias[sobra] += 1;
-				iCopia = iCopia/10;
-			}
-		}
-		
-		String saida = "";
-		for(int i = 0; i < ocorrencias.length; i++){
-			saida += ocorrencias[i] + " ";
-		}
-		
-		return saida.trim();
-	}
-	
-	static String solucaoSimplista(int limiteA, int limiteB){			
-		long[] ocorrencias = new long[10];
-		
-		for(int i = limiteA;  i <= limiteB; i++ ){			
-			int iCopia = i;
-			while(iCopia > 0){
-				int sobra = iCopia%10;
-			
-				ocorrencias[sobra] += 1;
-				iCopia = iCopia/10;
-			}
-		}
-		
-		String saida = "";
-		for(int i = 0; i < ocorrencias.length; i++){
-			saida += ocorrencias[i] + " ";
-		}
-		
-		return saida.trim();
-	}
-	
-	static Map<Integer, Intervalo> intervalosCalculados = new HashMap<>();
 	static String solucaoProgramacaoDinamica(int limiteA, int limiteB){
 		long[] ocorrencias = new long[10];
 		
