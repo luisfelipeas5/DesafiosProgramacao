@@ -29,16 +29,45 @@ public class SolucaoAlternativa{
 	}
 	
 	static String solucaoAlternativa(int limiteA, int limiteB){
-		long[] ocorrencias = new long[10];
+		long[] ocorrencias = new long[10];		
 		
-		for(int i = limiteA;  i <= limiteB; i++ ){			
-			int iCopia = i;
-			while(iCopia > 0){
-				int sobra = iCopia%10;
+		int ordem = 1;
+		
+		while(limiteA > 0 || limiteB > 0){
+			while(limiteA <= limiteB && limiteA%10 != 0){			
+				for(int i = limiteA; i > 0; i = i/10){
+					int sobra = i%10;
+					ocorrencias[sobra] += 1 * ordem;
+				}
 			
-				ocorrencias[sobra] += 1;
-				iCopia = iCopia/10;
+				limiteA++;
 			}
+		
+			while(limiteA <= limiteB && limiteB%10 != 0){
+				for(int i = limiteB; i > 0; i = i/10){
+					int sobra = i%10;
+					ocorrencias[sobra] += 1 * ordem;
+				}
+			
+				limiteB--;
+			}
+			if(limiteB%10 == 0){
+				for(int i = limiteB; i > 0; i = i/10){
+					int sobra = i%10;
+					ocorrencias[sobra] += 1 * ordem;
+				}
+			}
+			
+		
+			int gap = (limiteB - limiteA)/10;
+			for(int i = 0; i < ocorrencias.length; i++){
+				ocorrencias[i] += gap * ordem;
+			}
+		
+			limiteA = limiteA/10;
+			limiteB = limiteB/10 - 1;
+			
+			ordem = ordem*10;
 		}
 		
 		String saida = "";

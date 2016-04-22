@@ -18,9 +18,7 @@ public class SolucaoAlternativa{
 				limiteA = Integer.parseInt(split[1]);
 				limiteB = Integer.parseInt(split[0]);
 			}
-			
-			//String saida = solucaoSimplista(limiteA, limiteB);
-			//String saida = solucaoProgramacaoDinamica(limiteA, limiteB);
+
 			String saida = solucaoAlternativa(limiteA, limiteB);
 			System.out.println(saida);
 			
@@ -31,77 +29,47 @@ public class SolucaoAlternativa{
 	}
 	
 	static String solucaoAlternativa(int limiteA, int limiteB){
-		long[] ocorrencias = new long[10];
+		long[] ocorrencias = new long[10];		
 		
-		for(int i = limiteA;  i <= limiteB; i++ ){			
-			int iCopia = i;
-			while(iCopia > 0){
-				int sobra = iCopia%10;
-			
-				ocorrencias[sobra] += 1;
-				iCopia = iCopia/10;
-			}
-		}
+		int ordem = 1;
 		
-		String saida = "";
-		for(int i = 0; i < ocorrencias.length; i++){
-			saida += ocorrencias[i] + " ";
-		}
-		
-		return saida.trim();
-	}
-	
-	static String solucaoSimplista(int limiteA, int limiteB){			
-		long[] ocorrencias = new long[10];
-		
-		for(int i = limiteA;  i <= limiteB; i++ ){			
-			int iCopia = i;
-			while(iCopia > 0){
-				int sobra = iCopia%10;
-			
-				ocorrencias[sobra] += 1;
-				iCopia = iCopia/10;
-			}
-		}
-		
-		String saida = "";
-		for(int i = 0; i < ocorrencias.length; i++){
-			saida += ocorrencias[i] + " ";
-		}
-		
-		return saida.trim();
-	}
-	
-	static Map<Integer, Intervalo> intervalosCalculados = new HashMap<>();
-	static String solucaoProgramacaoDinamica(int limiteA, int limiteB){
-		long[] ocorrencias = new long[10];
-		
-		for(int i = limiteA;  i <= limiteB; i++ ){
-			//Conferir se um intervalo a partir de i já foi calculado
-			Intervalo intervalo = intervalosCalculados.get(i);
-			if(intervalo != null){
-				int intervaloLimiteB = intervalo.getLimiteB();
-				//System.out.println("\tIntervalo Calculado encontrado " + intervaloLimiteB);
-				if(intervaloLimiteB < limiteB){
-					//adicionar as ocorrencias do intervalo já calculado as ocorrencias corrente
-					long[] intervaloOcorrencias = intervalo.getOcorrencias();
-					for(int j = 0; j < ocorrencias.length; j++){
-						ocorrencias[j] += intervaloOcorrencias[j];
-					}
-			
-					//int intervaloLimiteA = intervalo.getLimiteA();
-					i = intervaloLimiteB;
-					continue;
+		while(limiteA > 0 || limiteB > 0){
+			while(limiteA <= limiteB && limiteA%10 != 0){			
+				for(int i = limiteA; i > 0; i = i/10){
+					int sobra = i%10;
+					ocorrencias[sobra] += 1 * ordem;
 				}
-			}				
-		
-			int iCopia = i;
-			while(iCopia > 0){
-				int sobra = iCopia%10;
 			
-				ocorrencias[sobra] += 1;
-				iCopia = iCopia/10;
+				limiteA++;
 			}
+		
+			while(limiteA <= limiteB && limiteB%10 != 0){
+				for(int i = limiteB; i > 0; i = i/10){
+					int sobra = i%10;
+					ocorrencias[sobra] += 1 * ordem;
+				}
+			
+				limiteB--;
+			}
+			if(limiteB%10 == 0){
+				for(int i = limiteB; i > 0; i = i/10){
+					int sobra = i%10;
+					ocorrencias[sobra] += 1 * ordem;
+				}
+			
+				limiteB--;
+			}
+			
+		
+			int gap = (limiteB - limiteA)/10;
+			for(int i = 0; i < ocorrencias.length; i++){
+				ocorrencias[i] += gap * ordem;
+			}
+		
+			limiteA = limiteA/10;
+			limiteB = limiteB/10 - 1;
+			
+			ordem = ordem*10;
 		}
 		
 		String saida = "";
@@ -109,48 +77,6 @@ public class SolucaoAlternativa{
 			saida += ocorrencias[i] + " ";
 		}
 		
-		//adicionar intervalo as Ocorrencias dos Intervalos Calculados
-		Intervalo intervaloCorrente = intervalosCalculados.get(limiteA);
-		if(intervaloCorrente == null){
-			intervaloCorrente = new Intervalo(limiteA, limiteB, ocorrencias);
-			intervalosCalculados.put(limiteA, intervaloCorrente);
-		} else{
-			if(intervaloCorrente.getLimiteB() < limiteB){
-				intervaloCorrente.setLimiteB(limiteB);
-				intervaloCorrente.setOcorrencias(ocorrencias);
-				intervalosCalculados.put(limiteA, intervaloCorrente);
-			}
-		}
-		
-		
 		return saida.trim();
-	}
-}
-
-class Intervalo{
-	private int limiteA;
-	private int limiteB;
-	private long[] ocorrencias;
-	
-	public Intervalo(int limiteA, int limiteB, long[] ocorrencias){
-		this.limiteA = limiteA;
-		this.limiteB = limiteB;
-		this.ocorrencias = ocorrencias;
-	}
-	
-	public int getLimiteB(){
-		return limiteB;
-	}
-	
-	public void setLimiteB(int limiteB){
-		this.limiteB = limiteB;
-	}
-	
-	public long[] getOcorrencias(){
-		return ocorrencias;
-	}	
-	
-	public void setOcorrencias(long[] ocorrencias){
-		this.ocorrencias = ocorrencias;
 	}
 }
