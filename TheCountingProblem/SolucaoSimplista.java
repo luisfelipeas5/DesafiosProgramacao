@@ -28,15 +28,17 @@ public class SolucaoSimplista{
 		scanner.close();
 	}
 		
-	static String solucaoSimplista(int limiteA, int limiteB){			
+	//dado limiteA e limiteB, sendo que limiteA < limiteB
+	static String solucaoSimplista(int limiteA, int limiteB){
 		long[] ocorrencias = new long[10];
 		
+		//iteração sobre todos os itens do intervalo
 		for(int i = limiteA;  i <= limiteB; i++ ){			
 			int iCopia = i;
 			while(iCopia > 0){
-				int sobra = iCopia%10;
+				int sobra = iCopia%10; //separa o ultimo algarismo
 			
-				ocorrencias[sobra] += 1;
+				ocorrencias[sobra] += 1; //conta a ocorrencia do numero separado
 				iCopia = iCopia/10;
 			}
 		}
@@ -48,4 +50,11 @@ public class SolucaoSimplista{
 		
 		return saida.trim();
 	}
+	
+	
+	
+	
+	
+	
+	
 }

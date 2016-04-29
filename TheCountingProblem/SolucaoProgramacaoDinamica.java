@@ -3,8 +3,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class SolucaoProgramacaoDinamica{
-	static Map<Integer, Intervalo> intervalosCalculados = new HashMap<>();
-
 	public static void main(String[] args){
 		Scanner scanner = new Scanner(System.in);
 		
@@ -30,6 +28,7 @@ public class SolucaoProgramacaoDinamica{
 		scanner.close();
 	}
 	
+	static Map<Integer, Intervalo> intervalosCalculados = new HashMap<>();	
 	static String solucaoProgramacaoDinamica(int limiteA, int limiteB){
 		long[] ocorrencias = new long[10];
 		
@@ -37,8 +36,8 @@ public class SolucaoProgramacaoDinamica{
 			//Conferir se um intervalo a partir de i já foi calculado
 			Intervalo intervalo = intervalosCalculados.get(i);
 			if(intervalo != null){
+				//Subintervalo já calculado
 				int intervaloLimiteB = intervalo.getLimiteB();
-				//System.out.println("\tIntervalo Calculado encontrado " + intervaloLimiteB);
 				if(intervaloLimiteB < limiteB){
 					//adicionar as ocorrencias do intervalo já calculado as ocorrencias corrente
 					long[] intervaloOcorrencias = intervalo.getOcorrencias();
@@ -46,7 +45,6 @@ public class SolucaoProgramacaoDinamica{
 						ocorrencias[j] += intervaloOcorrencias[j];
 					}
 			
-					//int intervaloLimiteA = intervalo.getLimiteA();
 					i = intervaloLimiteB;
 					continue;
 				}
