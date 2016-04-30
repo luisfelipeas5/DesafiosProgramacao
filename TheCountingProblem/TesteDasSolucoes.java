@@ -1,29 +1,50 @@
-import java.util.Scanner;
+import java.util.Random;
 
-public class SolucaoAlternativa{
+public class TesteDasSolucoes{
 	public static void main(String[] args){
-		Scanner scanner = new Scanner(System.in);
-		
-		String entrada = scanner.nextLine();
-		while(!entrada.equals("0 0")){
-			String[] split = entrada.split(" ");
+		Random random = new Random();
+		for(int i = 1; i < Integer.MAX_VALUE; i++){
+			int a = random.nextInt(1000000 - 2) + 1;
+			int b = random.nextInt(1000000 - 2) + 1;
 			
-			long limiteA, limiteB;
-			if(Integer.parseInt(split[0]) < Integer.parseInt(split[1])){
-				limiteA = Integer.parseInt(split[0]);
-				limiteB = Integer.parseInt(split[1]);	
-			} else{
-				limiteA = Integer.parseInt(split[1]);
-				limiteB = Integer.parseInt(split[0]);
+			if(b < a){
+				int aux = a;
+				a = b;
+				b = aux;
 			}
-
-			String saida = solucaoAlternativa(limiteA, limiteB);
-			System.out.println(saida);
+						
+			String saidaSimplista = solucaoSimplista(a, b);
+			String saidaAlternativa = solucaoAlternativa(a, b);
+			if(!saidaSimplista.equals(saidaAlternativa)){
+				System.out.println(a + ", " + b);
+				System.out.println(saidaSimplista);
+				System.out.println(saidaAlternativa);
+				System.out.println();
+			}
+		}
+	}
+	
+	//dado limiteA e limiteB, sendo que limiteA < limiteB
+	static String solucaoSimplista(int limiteA, int limiteB){
+		long[] ocorrencias = new long[10];
+		
+		//iteração sobre todos os itens do intervalo
+		for(int i = limiteA;  i <= limiteB; i++ ){			
+			int iCopia = i;
+			while(iCopia > 0){
+				int sobra = iCopia%10; //separa o ultimo algarismo
 			
-			entrada = scanner.nextLine();
+				ocorrencias[sobra] += 1; //conta a ocorrencia do numero separado
+				iCopia = iCopia/10;
+			}
 		}
 		
-		scanner.close();
+		String saida = "";
+		for(int i = 0; i < ocorrencias.length; i++){
+			saida += ocorrencias[i] + " ";
+		}
+		
+		return saida.trim();
 	}
 	
 	static String solucaoAlternativa(long limiteA, long limiteB){
